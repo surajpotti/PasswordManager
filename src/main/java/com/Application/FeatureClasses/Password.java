@@ -33,15 +33,17 @@ public class Password implements PasswordInterface{
 
 
 	@ManagedOperation
-	public boolean addPasswordToDB(String applicationName, String emailAddress, String type, String password) {
+	public String addPasswordToDB(String applicationName, String emailAddress, String type, String password) {
 		
-		passwordDir.checkifValidEmailAddress(emailAddress);
-		PasswordPOJO newObj = new PasswordPOJO(new Date().toString(),applicationName,emailAddress,type,password);
+		if(!passwordDir.checkIfValidEmailAddress(emailAddress)) {
+			return "Not a valid email address signature.";
+		}
+		PasswordPOJO newObj = new PasswordPOJO(new Date().toString(),applicationName,emailAddress,type,password,"");
 		if(!passwordDir.checkforexistingEntry(newObj)) {
 			passwordDir.addNewEntry(newObj);
-			return true;
+			return "New entry created successfully.";
 		}
-		return false;
+		return "Error, please check you entry again.";
 		
 	}
 	
@@ -50,13 +52,13 @@ public class Password implements PasswordInterface{
 	@ManagedOperationParameter(name = "applicationName", description = "Name of the application.")
     @ManagedOperationParameter(name = "emailAddress", description = "The email address used.")
 	public String updatePasswordEntry(String applicationName, String emailAddress, String updatedPassword) {
-		if(applicationName.equals("String") || emailAddress.equals("String") ||
-				applicationName.isEmpty() || emailAddress.isEmpty()) {
-			return "Incorrect input, please check and enter again.";
-		}
-		if(passwordDir.updateAnEntry(applicationName, emailAddress, updatedPassword)) {
-			return "Found the entry and made the change";
-		}
+//		if(applicationName.equals("String") || emailAddress.equals("String") ||
+//				applicationName.isEmpty() || emailAddress.isEmpty()) {
+//			return "Incorrect input, please check and enter again.";
+//		}
+//		if(passwordDir.updateAnEntry(applicationName, emailAddress, updatedPassword)) {
+//			return "Found the entry and made the change";
+//		}
 		return "";
 	}
 

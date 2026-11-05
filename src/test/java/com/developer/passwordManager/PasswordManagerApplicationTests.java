@@ -21,7 +21,7 @@ class PasswordManagerApplicationTests {
 	@Test
 	void testcheckifValidEmailAddress() {
 		String email = scanner.nextLine();
-		System.out.println("Validity of email address:" + testObj2.checkifValidEmailAddress(email));
+		//System.out.println("Validity of email address:" + testObj2.checkifValidEmailAddress(email));
 	}
 
 	@Test
@@ -32,11 +32,16 @@ class PasswordManagerApplicationTests {
 		newObj.setEmailAddress(scanner.nextLine());
 		newObj.setApplicationType(scanner.nextLine());
 		newObj.setPassword(scanner.nextLine());
-		System.out.println("Does entry already exists: " + testObj2.checkforexistingEntry(newObj));
+		//System.out.println("Does entry already exists: " + testObj2.checkforexistingEntry(newObj));
 	}
 	
 	@Test
 	void testupdatePasswordEntry() {
 		System.out.println("Does entry already exists: " + testObj.updatePasswordEntry("Amazon","fakenotsuraj@gmail.com",""));
+	}
+	
+	@Test
+	void testCreateCSV() {
+		
 	}
 }

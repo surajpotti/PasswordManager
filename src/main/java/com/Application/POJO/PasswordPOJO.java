@@ -1,37 +1,43 @@
 package com.Application.POJO;
 
 
-
 public class PasswordPOJO {
 
 	private String dateOfCreation;
+	
 	private String applicationName;
+
 	private String emailAddress;
+	
 	private String applicationType;
 	
 	private String password;
+
+	private String lastPassword;
 	
 	public PasswordPOJO() {
 		super();
 	}
 
 	public PasswordPOJO(String dateOfCreation, String applicationName, String emailAddress, String applicationType,
-			String password) {
+			String password,String lastPassword) {
 		super();
 		this.dateOfCreation = dateOfCreation;
 		this.applicationName = applicationName;
 		this.emailAddress = emailAddress;
 		this.applicationType = applicationType;
 		this.password = password;
+		this.lastPassword = lastPassword;
 	}
-
-
+	
 
 	@Override
 	public String toString() {
-		return "Password [dateOfCreation=" + dateOfCreation + ", applicationName=" + applicationName + ", emailAddress="
-				+ emailAddress + ", applicationType=" + applicationType + ", password=" + password + "]";
+		return "PasswordPOJO [dateOfCreation=" + dateOfCreation + ", applicationName=" + applicationName
+				+ ", emailAddress=" + emailAddress + ", applicationType=" + applicationType + ", password=" + password
+				+ ", lastPassword=" + lastPassword + "]";
 	}
+
 
 	/**
 	 * @return the dateOfCreation
@@ -101,6 +107,20 @@ public class PasswordPOJO {
 	 */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	/**
+	 * @return the lastPassword
+	 */
+	public String getLastPassword() {
+		return lastPassword;
+	}
+
+	/**
+	 * @param lastPassword the lastPassword to set
+	 */
+	public void setLastPassword(String lastPassword) {
+		this.lastPassword = lastPassword;
 	}
 
 
