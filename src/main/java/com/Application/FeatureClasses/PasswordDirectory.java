@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -16,12 +17,13 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.stereotype.Component;
 
 import com.Application.POJO.PasswordPOJO;
 import com.Application.interfaces.PasswordCSVInterface;
 
 
-@MXBean
+@Component
 public class PasswordDirectory implements PasswordCSVInterface{
 	
 	private static final String passwordDirectory = "passwordDirectory.csv";
@@ -39,7 +41,6 @@ public class PasswordDirectory implements PasswordCSVInterface{
 		        "(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
 	    // Pre-compile the pattern for optimal performance
 		EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
-		// Centralised Header Definition
 		
 		
 	}
@@ -49,7 +50,6 @@ public class PasswordDirectory implements PasswordCSVInterface{
 		this.passwordEntries = new ArrayList<PasswordPOJO>();
 		createCSV();
 		initalizeListFromCSV();
-		System.out.println("Password Entries: " + this.passwordEntries.toString());
 	}
 	
 	
@@ -200,7 +200,53 @@ public class PasswordDirectory implements PasswordCSVInterface{
 
 	 @Override
 	 public boolean updateAnEntry(String applicatioName, String emailAddress, String updatedPassword) {
-		// TODO Auto-generated method stub
+		// 1. Read all existing records from the file into memory
+	        
+	        
+	        boolean recordFound = false;
+
+	        if(getPasswordEntries().size()>0) {
+		        // 2. Find the specific record and update its attributes
+		        for (PasswordPOJO record : passwordEntries) {
+		            if (record.getApplicationName().equals(applicatioName) &&
+		            		record.getEmailAddress().equals(emailAddress)) {
+		            	String currentPassword = record.getPassword();
+		            	record.setLastPassword(currentPassword);	
+		            	record.setDateOfCreation(new Date().toString());
+		                if (updatedPassword != null) record.setPassword(updatedPassword);
+		                recordFound = true;
+		                break; // Exit loop once the target row is updated
+		            }
+		        }
+	
+		        if (!recordFound) {
+		            throw new IllegalArgumentException("Record was not found in the CSV.");
+		        }
+	
+		        // 3. Rewrite the entire file with the updated list
+		        File file = new File(passwordDirectory);
+		        
+		        // Use standard DEFAULT builder with headers. Do NOT skip headers here because we are rebuilding the file.
+		        CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
+		                .setHeader(HEADERS)
+		                .build();
+	
+		        // Note: Do NOT pass 'true' to FileWriter here. We want to overwrite the old file entirely.
+		        try (FileWriter out = new FileWriter(file);
+		             CSVPrinter printer = new CSVPrinter(out, csvFormat)) {
+		            
+		            for (PasswordPOJO record : passwordEntries) {
+		                printer.printRecord(record.getDateOfCreation(),record.getApplicationName(),
+		                		record.getEmailAddress(),record.getApplicationType(),
+		                		record.getLastPassword(),record.getPassword());
+		            }
+		            printer.flush();
+		            return true;
+		        } catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	        }
 		return false;
 	 }
 
@@ -218,5 +264,12 @@ public class PasswordDirectory implements PasswordCSVInterface{
         }
         return escapedData;
     }
+
+
+
+	
+	
+	
+	
 	 
 }

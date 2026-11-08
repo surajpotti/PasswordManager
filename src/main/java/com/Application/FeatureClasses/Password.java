@@ -1,33 +1,31 @@
 package com.Application.FeatureClasses;
 
 import java.util.Date;
-import java.util.Scanner;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedOperationParameter;
 import org.springframework.jmx.export.annotation.ManagedResource;
+import org.springframework.stereotype.Service;
 
 import com.Application.POJO.PasswordPOJO;
+import com.Application.SessionManager.SignInManager;
 import com.Application.interfaces.PasswordInterface;
 
-
+@Service
 @ManagedResource
 public class Password implements PasswordInterface{
-	
-	
 
-	
-	Scanner scanner = new Scanner(System.in);
-	
 	
 	@Autowired
 	PasswordDirectory passwordDir;
 	
-
+	private final SignInManager signIn;
+	
 	
 	public Password() {
-		passwordDir = new PasswordDirectory();
+		signIn = new SignInManager();
 		System.out.println("The app is up and running.");
 	}
 
@@ -43,7 +41,7 @@ public class Password implements PasswordInterface{
 			passwordDir.addNewEntry(newObj);
 			return "New entry created successfully.";
 		}
-		return "Error, please check you entry again.";
+		return "The entry already exists. Please check.";
 		
 	}
 	
@@ -52,16 +50,33 @@ public class Password implements PasswordInterface{
 	@ManagedOperationParameter(name = "applicationName", description = "Name of the application.")
     @ManagedOperationParameter(name = "emailAddress", description = "The email address used.")
 	public String updatePasswordEntry(String applicationName, String emailAddress, String updatedPassword) {
-//		if(applicationName.equals("String") || emailAddress.equals("String") ||
-//				applicationName.isEmpty() || emailAddress.isEmpty()) {
-//			return "Incorrect input, please check and enter again.";
-//		}
-//		if(passwordDir.updateAnEntry(applicationName, emailAddress, updatedPassword)) {
-//			return "Found the entry and made the change";
-//		}
-		return "";
+		if(applicationName.equals("String") || emailAddress.equals("String") ||
+				applicationName.isEmpty() || emailAddress.isEmpty()) {
+			return "Incorrect input, please check and enter again.";
+		}
+		if(passwordDir.updateAnEntry(applicationName, emailAddress, updatedPassword)) {
+			return "Found the entry and made the change";
+		}
+		return "The entry not found.";
 	}
-
 	
+    @ManagedOperation(description = "View all current CSV records inside JConsole")
+    public String showAllRecords() {
+    	
+    	
+        try {
+            List<PasswordPOJO> records = passwordDir.getPasswordEntries();
+            StringBuilder sb = new StringBuilder("--- PASSWORD MANAGER MASTER RECORDS ---\n");
+            for (PasswordPOJO r : records) {
+                sb.append(String.format("Date of Creation: %s | Application Name: %s | Email: %s"
+                		+ "|ApplicationType: %s | Last Password: %s| Latest Password: %s\n", 
+                		r.getDateOfCreation(), r.getApplicationName(), r.getEmailAddress(), r.getApplicationType(), r.getLastPassword(),r.getPassword()));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            return "Error reading file: " + e.getMessage();
+        }
+	}
+    
 
 }

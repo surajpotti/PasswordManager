@@ -86,6 +86,7 @@ public class PasswordMBeanFactory{
                     objectName = new ObjectName(nameStr);
                     
                     registerOnServer(mbs, mbeanInstance, objectName);
+                    System.out.println("MBean registered for the class: " + objectName);
                     continue;
                 }
 
@@ -95,6 +96,8 @@ public class PasswordMBeanFactory{
                     mbeanInstance = new StandardMBean(clazz.getDeclaredConstructor().newInstance(), (Class) mxbeanInterface, true);
                     objectName = new ObjectName(classPackage + ":type=" + typeName);
                     registerOnServer(mbs, mbeanInstance, objectName);
+
+                    System.out.println("MBean registered for the class: " + objectName);
                     continue;
                 }
 
@@ -104,13 +107,15 @@ public class PasswordMBeanFactory{
                     mbeanInstance = clazz.getDeclaredConstructor().newInstance();
                     objectName = new ObjectName(classPackage + ":type=" + typeName);
                     registerOnServer(mbs, mbeanInstance, objectName);
+
+                    System.out.println("MBean registered for the class: " + objectName);
                 }
+                
             }
         } catch (Exception e) {
             System.err.println("Recursive package JMX registration failed: " + e.getMessage());
             e.printStackTrace();
         }
-        while(true) {}
     }
 
     /**
