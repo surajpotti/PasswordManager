@@ -28,6 +28,8 @@ public class SignInPage extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField usernameTxtField;
+	private JButton btnCancel;
+	private JPasswordField passwordTxtField;
 	
 	@Autowired
 	private SignInManager signInObj;
@@ -35,8 +37,7 @@ public class SignInPage extends JFrame {
 	@Autowired
 	private UserPage userPage;
 	
-	private JButton btnCancel;
-	private JPasswordField passwordTxtField;
+
 	
 //	/**
 //	 * Launch the application.

@@ -14,7 +14,6 @@ import com.Application.SessionManager.SignInManager;
 import com.Application.interfaces.PasswordInterface;
 
 @Service
-@ManagedResource
 public class Password implements PasswordInterface{
 
 	
@@ -61,21 +60,21 @@ public class Password implements PasswordInterface{
 	}
 	
     @ManagedOperation(description = "View all current CSV records inside JConsole")
-    public String showAllRecords() {
+    public List<PasswordPOJO> showAllRecords() {
+    	return passwordDir.getPasswordEntries();
     	
-    	
-        try {
-            List<PasswordPOJO> records = passwordDir.getPasswordEntries();
-            StringBuilder sb = new StringBuilder("--- PASSWORD MANAGER MASTER RECORDS ---\n");
-            for (PasswordPOJO r : records) {
-                sb.append(String.format("Date of Creation: %s | Application Name: %s | Email: %s"
-                		+ "|ApplicationType: %s | Last Password: %s| Latest Password: %s\n", 
-                		r.getDateOfCreation(), r.getApplicationName(), r.getEmailAddress(), r.getApplicationType(), r.getLastPassword(),r.getPassword()));
-            }
-            return sb.toString();
-        } catch (Exception e) {
-            return "Error reading file: " + e.getMessage();
-        }
+//        try {
+//            List<PasswordPOJO> records = passwordDir.getPasswordEntries();
+//            StringBuilder sb = new StringBuilder("--- PASSWORD MANAGER MASTER RECORDS ---\n");
+//            for (PasswordPOJO r : records) {
+//                sb.append(String.format("Date of Creation: %s | Application Name: %s | Email: %s"
+//                		+ "|ApplicationType: %s | Last Password: %s| Latest Password: %s\n", 
+//                		r.getDateOfCreation(), r.getApplicationName(), r.getEmailAddress(), r.getApplicationType(), r.getLastPassword(),r.getPassword()));
+//            }
+//            return sb.toString();
+//        } catch (Exception e) {
+//            return "Error reading file: " + e.getMessage();
+//        }
 	}
     
 

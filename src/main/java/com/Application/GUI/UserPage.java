@@ -18,7 +18,12 @@ public class UserPage extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-
+	
+	@Autowired
+	UserDialog userDialogObj;
+	
+	@Autowired
+	PasswordLedger passDirectoryObj;
 	
 	/**
 	 * Launch the application.
@@ -40,8 +45,6 @@ public class UserPage extends JFrame {
 	 * Create the frame.
 	 */
 	public UserPage() {
-
-		UserDialog userDialogObj = new UserDialog();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -68,6 +71,11 @@ public class UserPage extends JFrame {
 		contentPane.add(btnEdit);
 		
 		JButton btnShowAll = new JButton("Show All");
+		btnShowAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//passDirectoryObj.setVisible(true);
+			}
+		});
 		sl_contentPane.putConstraint(SpringLayout.NORTH, btnShowAll, 19, SpringLayout.SOUTH, btnEdit);
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnShowAll, 0, SpringLayout.WEST, btnAddNew);
 		sl_contentPane.putConstraint(SpringLayout.EAST, btnShowAll, 0, SpringLayout.EAST, btnAddNew);

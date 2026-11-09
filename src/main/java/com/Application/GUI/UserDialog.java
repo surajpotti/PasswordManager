@@ -56,8 +56,7 @@ public class UserDialog extends JDialog {
 	 */
 	public UserDialog() {
 		
-		String passwordFieldStr;
-		String cnfPasswordFieldStr;
+		
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -122,7 +121,8 @@ public class UserDialog extends JDialog {
 		{
 			passwordField = new JPasswordField();
 			contentPanel.add(passwordField, "12, 8, fill, default");
-			passwordFieldStr = new String(passwordField.getPassword());
+			///passwordFieldStr = new String(passwordField.getPassword());
+			
 		}
 		{
 			JLabel lblCnfPassword = new JLabel("Confirm Password");
@@ -132,7 +132,7 @@ public class UserDialog extends JDialog {
 		{
 			confirmPasswordField = new JPasswordField();
 			contentPanel.add(confirmPasswordField, "12, 10, fill, default");
-			cnfPasswordFieldStr = new String(confirmPasswordField.getPassword());
+			//cnfPasswordFieldStr = new String(confirmPasswordField.getPassword());
 		}
 		{
 			JCheckBox chckbxNewCheckBox = new JCheckBox("Show Password");
@@ -147,8 +147,11 @@ public class UserDialog extends JDialog {
 				JButton okCreate = new JButton("Create");
 				okCreate.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						String passwordFieldStr = new String(passwordField.getPassword());
+						String cnfPasswordFieldStr =  new String(confirmPasswordField.getPassword());
 						if(passwordFieldStr.equals(cnfPasswordFieldStr)) {
-							passwordObj.addPasswordToDB(applicationNameField.getText(), emailAddressField.getText(), applicationTypeField.getText(), passwordFieldStr);
+							
+							JOptionPane.showMessageDialog(null, passwordObj.addPasswordToDB(applicationNameField.getText(), emailAddressField.getText(), applicationTypeField.getText(), passwordFieldStr));
 						}else {
 							JOptionPane.showMessageDialog(null, "The password doesn't match. Please check it again.");
 						}
