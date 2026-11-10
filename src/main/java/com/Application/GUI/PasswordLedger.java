@@ -1,7 +1,7 @@
 package com.Application.GUI;
 
 
-import javax.swing.JInternalFrame;
+import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -15,7 +15,7 @@ import com.Application.POJO.PasswordPOJO;
 import javax.swing.JScrollPane;
 
 @Component
-public class PasswordLedger extends JInternalFrame {
+public class PasswordLedger extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JTable showAllJtable;
@@ -43,10 +43,18 @@ public class PasswordLedger extends JInternalFrame {
 	 * Create the frame.
 	 */
 	public PasswordLedger() {
-		
+		super();
+	}
+	
+	
+	public void initialize() {
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(null);
+		setLocationRelativeTo(null);
 		
+		JScrollPane showAllScrollPane = new JScrollPane();
+		showAllScrollPane.setBounds(10, 11, 414, 248);
+		getContentPane().add(showAllScrollPane);
 		String[] columns = {"Date of Creation","Application Name", "Email ID", "Application Type", "Last Password", "Latest Password"};
 
 		// 3. Create the model
@@ -57,16 +65,9 @@ public class PasswordLedger extends JInternalFrame {
 					record.getApplicationType(),record.getLastPassword(),record.getPassword()};
 		    model.addRow(rowData);
 		}
-		
-		JScrollPane showAllScrollPane = new JScrollPane();
-		showAllScrollPane.setBounds(10, 11, 414, 248);
-		getContentPane().add(showAllScrollPane);
-		
 		showAllJtable = new JTable(model);
+		showAllJtable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		showAllScrollPane.setViewportView(showAllJtable);
-
 	}
-
-
 
 }

@@ -267,6 +267,48 @@ public class PasswordDirectory implements PasswordCSVInterface{
 
 
 
+	@Override
+	public List<PasswordPOJO> userSearchForRecords(String applicationName, String emailAddress) {
+		List<PasswordPOJO> searchResults = new ArrayList<PasswordPOJO>();
+		int queryPassed = 0;
+		if(applicationName.isBlank() && emailAddress.isBlank()){
+			queryPassed = 0;
+		}else if(!applicationName.isBlank() || emailAddress.isBlank()) {
+			queryPassed = 1;
+		}else if(applicationName.isBlank() || !emailAddress.isBlank()) {
+			queryPassed = 2;
+		}else {
+			queryPassed = 3;
+		}
+		System.out.println("Query selected: " + queryPassed);
+		switch(queryPassed) {
+			case 0: 
+				break;
+			case 1:
+				for(PasswordPOJO entries : getPasswordEntries()) {
+					if(entries.getApplicationName().equals(applicationName)) {
+						searchResults.add(entries);
+					}else {continue;}
+				}break;
+			case 2:
+				for(PasswordPOJO entries : getPasswordEntries()) {
+					if(entries.getEmailAddress().equals(emailAddress)) {
+						searchResults.add(entries);
+					}else {continue;}
+				}break;
+			case 3:
+				for(PasswordPOJO entries : getPasswordEntries()) {
+					if(entries.getApplicationName().equals(applicationName) || entries.getEmailAddress().equals(emailAddress)) {
+						searchResults.add(entries);
+					}else {continue;}
+				}break;
+		} 
+		
+		return searchResults;
+	}
+
+
+
 	
 	
 	

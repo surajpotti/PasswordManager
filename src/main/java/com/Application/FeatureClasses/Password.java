@@ -17,6 +17,7 @@ import com.Application.interfaces.PasswordInterface;
 public class Password implements PasswordInterface{
 
 	
+
 	@Autowired
 	PasswordDirectory passwordDir;
 	
@@ -75,6 +76,12 @@ public class Password implements PasswordInterface{
 //        } catch (Exception e) {
 //            return "Error reading file: " + e.getMessage();
 //        }
+	}
+
+	@Override
+	public List<PasswordPOJO> searchForRecords(String applicationName, String emailAddress) {
+		System.out.println( passwordDir.userSearchForRecords(applicationName, emailAddress));
+		return passwordDir.userSearchForRecords(applicationName, emailAddress);
 	}
     
 

@@ -25,6 +25,8 @@ public class UserPage extends JFrame {
 	@Autowired
 	PasswordLedger passDirectoryObj;
 	
+	@Autowired
+	UpdatePage updPageObj;
 	/**
 	 * Launch the application.
 	 */
@@ -65,6 +67,12 @@ public class UserPage extends JFrame {
 		contentPane.add(btnAddNew);
 		
 		JButton btnEdit = new JButton("Edit Entry");
+		btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				updPageObj.initialize();
+				updPageObj.setVisible(true);
+			}
+		});
 		sl_contentPane.putConstraint(SpringLayout.NORTH, btnEdit, 23, SpringLayout.SOUTH, btnAddNew);
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnEdit, 152, SpringLayout.WEST, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.EAST, btnEdit, 0, SpringLayout.EAST, btnAddNew);
@@ -73,7 +81,8 @@ public class UserPage extends JFrame {
 		JButton btnShowAll = new JButton("Show All");
 		btnShowAll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//passDirectoryObj.setVisible(true);
+				passDirectoryObj.initialize();
+				passDirectoryObj.setVisible(true);
 			}
 		});
 		sl_contentPane.putConstraint(SpringLayout.NORTH, btnShowAll, 19, SpringLayout.SOUTH, btnEdit);
