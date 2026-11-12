@@ -13,7 +13,7 @@ public interface PasswordCSVInterface {
 	public String createCSV();
 	public boolean addNewEntry(PasswordPOJO passwordEntry);
 	public boolean updateAnEntry(String applicatioName, String emailAddress, String updatedPassword);
-	public boolean checkforexistingEntry(PasswordPOJO passwordEntry);
+	public boolean checkForExistingEntry(PasswordPOJO passwordEntry);
 	public List<PasswordPOJO> initalizeListFromCSV();
 	public boolean checkIfValidEmailAddress(String emailAddress);
 	public boolean writeBackToFile(PasswordPOJO passwrodEntry,String updatedPassword);

@@ -171,7 +171,7 @@ public class PasswordDirectory implements PasswordCSVInterface{
 	 
 
 	 @Override
-	 public boolean checkforexistingEntry(PasswordPOJO passwordEntry) {
+	 public boolean checkForExistingEntry(PasswordPOJO passwordEntry) {
 		 try {
 		     Iterator<PasswordPOJO> itr = getPasswordEntries().iterator();
 		     

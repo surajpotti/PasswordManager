@@ -26,7 +26,7 @@ public class UserPage extends JFrame {
 	PasswordLedger passDirectoryObj;
 	
 	@Autowired
-	UpdatePage updPageObj;
+	EditPage updPageObj;
 	/**
 	 * Launch the application.
 	 */

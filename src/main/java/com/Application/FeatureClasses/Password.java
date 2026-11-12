@@ -37,7 +37,7 @@ public class Password implements PasswordInterface{
 			return "Not a valid email address signature.";
 		}
 		PasswordPOJO newObj = new PasswordPOJO(new Date().toString(),applicationName,emailAddress,type,password,"");
-		if(!passwordDir.checkforexistingEntry(newObj)) {
+		if(!passwordDir.checkForExistingEntry(newObj)) {
 			passwordDir.addNewEntry(newObj);
 			return "New entry created successfully.";
 		}

@@ -2,5 +2,5 @@ package com.Application.artifacts;
 
 public enum ApplicationType {
 
-	WEBSITE, BANKING, MOBLILEAPPS;
+	Ecommerce, Banking, Entertainement, Payment, Educational;
 }
