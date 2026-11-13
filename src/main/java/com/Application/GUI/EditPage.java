@@ -3,6 +3,7 @@ package com.Application.GUI;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -15,7 +16,6 @@ import com.Application.POJO.PasswordPOJO;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JPasswordField;
@@ -28,7 +28,6 @@ public class EditPage extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JTextField appNameField;
 	private JTextField emailAddField;
-	private List<PasswordPOJO> searchedEntries;
 
 	@Autowired
 	Password passObj;
@@ -36,8 +35,11 @@ public class EditPage extends JFrame {
 	private JTable table;
 	private JPasswordField passwordField;
 	private JPasswordField cnfPasswordField;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField updAppNameField;
+	private JTextField updEmailAddField;
+
+	String passwordFieldStr = "";
+	String cnfPasswordFieldStr = "";
 
 //	/**
 //	 * Launch the application.
@@ -60,11 +62,13 @@ public class EditPage extends JFrame {
 	 */
 	public EditPage() {
 		super();
-		initialize();
+		//initialize();
 	}
 	
 	public void initialize() {
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		setTitle("Edit Entry");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 543, 441);
 		setLocationRelativeTo(null);
 		JLabel lblAppName = new JLabel("Application Name");
@@ -93,10 +97,9 @@ public class EditPage extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				tableModel.setRowCount(0);
 				if(!passObj.searchForRecords(appNameField.getText(), emailAddField.getText()).isEmpty()) {
-					//tableModel.setColumnCount(0);
+					tableModel.setColumnCount(0);
 					String[] columns = {"Date of Creation","Application Name", "Email ID", "Application Type", "Last Password", "Latest Password"};
 					tableModel.setColumnIdentifiers(columns);
-					if(!passObj.searchForRecords(appNameField.getText(), emailAddField.getText()).isEmpty())
 					for(PasswordPOJO record : passObj.searchForRecords(appNameField.getText(), emailAddField.getText())) {
 						Object[] rowData = { record.getDateOfCreation(),record.getApplicationName(), record.getEmailAddress(),
 								record.getApplicationType(),record.getLastPassword(),record.getPassword()};
@@ -118,6 +121,9 @@ public class EditPage extends JFrame {
         table.setEnabled(false);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setShowGrid(true);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+       
+        
         getContentPane().add(table);
 		getContentPane().add(lblEmailAdd);
 		getContentPane().add(emailAddField);
@@ -140,10 +146,10 @@ public class EditPage extends JFrame {
 		lblUpdateAppName.setBounds(11, 201, 85, 14);
 		getContentPane().add(lblUpdateAppName);
 		
-		textField = new JTextField();
-		textField.setBounds(122, 198, 167, 20);
-		getContentPane().add(textField);
-		textField.setColumns(10);
+		updAppNameField = new JTextField();
+		updAppNameField.setBounds(122, 198, 167, 20);
+		getContentPane().add(updAppNameField);
+		updAppNameField.setColumns(10);
 		
 		
 		
@@ -152,10 +158,10 @@ public class EditPage extends JFrame {
 		lblUpdateEmailAdd.setBounds(11, 227, 68, 14);
 		getContentPane().add(lblUpdateEmailAdd);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(122, 224, 167, 20);
-		getContentPane().add(textField_1);
-		textField_1.setColumns(10);
+		updEmailAddField = new JTextField();
+		updEmailAddField.setBounds(122, 224, 167, 20);
+		getContentPane().add(updEmailAddField);
+		updEmailAddField.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Password");
 		lblNewLabel_1.setBounds(11, 253, 46, 14);
@@ -165,6 +171,7 @@ public class EditPage extends JFrame {
 		passwordField.setBounds(122, 250, 167, 20);
 		getContentPane().add(passwordField);
 		
+		
 		JLabel lblNewLabel_2 = new JLabel("Confirm Password");
 		lblNewLabel_2.setBounds(11, 279, 87, 14);
 		getContentPane().add(lblNewLabel_2);
@@ -173,11 +180,26 @@ public class EditPage extends JFrame {
 		cnfPasswordField.setBounds(122, 276, 167, 20);
 		getContentPane().add(cnfPasswordField);
 		
+		
 		JButton btnReset = new JButton("Reset");
 		btnReset.setBounds(11, 346, 120, 23);
 		getContentPane().add(btnReset);
 		
 		JButton btnUpdate = new JButton("Update");
+		btnUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String passwordFieldStr = new String(passwordField.getPassword());
+				String cnfPasswordFieldStr = new String(cnfPasswordField.getPassword());
+				if(((!updAppNameField.getText().isEmpty() && !updEmailAddField.getText().isEmpty()) 
+					&& (!passwordFieldStr.isEmpty() && !cnfPasswordFieldStr.isEmpty())
+					&& passwordFieldStr.toLowerCase().equals(cnfPasswordFieldStr.toLowerCase()))){
+					JOptionPane.showMessageDialog(null, passObj.updatePasswordEntry(updAppNameField.getText(),updEmailAddField.getText(),passwordFieldStr));
+				}else {
+					JOptionPane.showMessageDialog(null, "Incorrect input please check and update.");
+				}
+		
+			}
+		});
 		btnUpdate.setBounds(141, 346, 148, 23);
 		getContentPane().add(btnUpdate);
 		

@@ -59,51 +59,39 @@ public class SignInPage extends JFrame {
 	 * Create the frame.
 	 */
 	public SignInPage() {
-		signInObj = new SignInManager();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		super();
+	}
+	
+	public void intialize(JFrame previousFrame) {
+		setTitle("Sign In");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new FormLayout(new ColumnSpec[] {
+				ColumnSpec.decode("143px"),
+				ColumnSpec.decode("67px"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				FormSpecs.DEFAULT_COLSPEC,
-				FormSpecs.RELATED_GAP_COLSPEC,
-				FormSpecs.DEFAULT_COLSPEC,
-				FormSpecs.RELATED_GAP_COLSPEC,
-				FormSpecs.DEFAULT_COLSPEC,
-				FormSpecs.RELATED_GAP_COLSPEC,
-				FormSpecs.DEFAULT_COLSPEC,
-				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),
-				FormSpecs.RELATED_GAP_COLSPEC,
-				FormSpecs.DEFAULT_COLSPEC,
-				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),},
+				ColumnSpec.decode("132px"),},
 			new RowSpec[] {
+				RowSpec.decode("55px"),
+				RowSpec.decode("20px"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,}));
+				RowSpec.decode("20px"),
+				RowSpec.decode("50px"),
+				RowSpec.decode("23px"),}));
 		
 		JLabel userNameLbl = new JLabel("Username");
-		contentPane.add(userNameLbl, "8, 4, center, default");
+		contentPane.add(userNameLbl, "2, 2, center, center");
 		
 		usernameTxtField = new JTextField();
 		usernameTxtField.setToolTipText("Enter username");
-		contentPane.add(usernameTxtField, "10, 4, fill, default");
+		contentPane.add(usernameTxtField, "4, 2, fill, top");
 		usernameTxtField.setColumns(10);
 		
 		JLabel passwordLbl = new JLabel("Password");
-		contentPane.add(passwordLbl, "8, 6, right, default");
+		contentPane.add(passwordLbl, "2, 4, center, center");
 		
 		JButton signInButton = new JButton("Sign In");
 		signInButton.addActionListener(new ActionListener() {
@@ -121,16 +109,25 @@ public class SignInPage extends JFrame {
 		});
 		
 		passwordTxtField = new JPasswordField();
-		contentPane.add(passwordTxtField, "10, 6, fill, default");
-		contentPane.add(signInButton, "8, 10");
+		contentPane.add(passwordTxtField, "4, 4, fill, default");
+		contentPane.add(signInButton, "2, 6, center, center");
 		
 		btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				callCancelMethod(previousFrame);
 			}
 		});
-		contentPane.add(btnCancel, "10, 10");
-
+		contentPane.add(btnCancel, "4, 6, center, center");
+		
 	}
+
+
+	
+	protected void callCancelMethod(JFrame previousFrame) {
+		this.dispose();
+		previousFrame.setVisible(true);
+	}
+	
 
 }

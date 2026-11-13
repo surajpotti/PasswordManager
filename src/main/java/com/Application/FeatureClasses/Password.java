@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedOperationParameter;
-import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.stereotype.Service;
 
 import com.Application.POJO.PasswordPOJO;
@@ -21,11 +20,11 @@ public class Password implements PasswordInterface{
 	@Autowired
 	PasswordDirectory passwordDir;
 	
-	private final SignInManager signIn;
+	@Autowired
+	SignInManager signIn;
 	
 	
 	public Password() {
-		signIn = new SignInManager();
 		System.out.println("The app is up and running.");
 	}
 
@@ -55,7 +54,7 @@ public class Password implements PasswordInterface{
 			return "Incorrect input, please check and enter again.";
 		}
 		if(passwordDir.updateAnEntry(applicationName, emailAddress, updatedPassword)) {
-			return "Found the entry and made the change";
+			return "Found the entry and updated the same.";
 		}
 		return "The entry not found.";
 	}
@@ -83,6 +82,21 @@ public class Password implements PasswordInterface{
 		System.out.println( passwordDir.userSearchForRecords(applicationName, emailAddress));
 		return passwordDir.userSearchForRecords(applicationName, emailAddress);
 	}
+
+
+	@Override
+	public String deletePasswordEntry(String applicationName, String emailAddress) {
+		if(applicationName.equals("String") || emailAddress.equals("String") ||
+				applicationName.isEmpty() || emailAddress.isEmpty()) {
+			return "Incorrect input, please check and enter again.";
+		}
+		if(passwordDir.deleteAnEntry(applicationName, emailAddress)) {
+			return "Found the entry and updated the same.";
+		}
+		return "The entry not found.";
+	}
     
+	
+	
 
 }

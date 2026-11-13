@@ -199,7 +199,7 @@ public class PasswordDirectory implements PasswordCSVInterface{
 	 
 
 	 @Override
-	 public boolean updateAnEntry(String applicatioName, String emailAddress, String updatedPassword) {
+	 public boolean updateAnEntry(String applicationName, String emailAddress, String updatedPassword) {
 		// 1. Read all existing records from the file into memory
 	        
 	        
@@ -208,7 +208,7 @@ public class PasswordDirectory implements PasswordCSVInterface{
 	        if(getPasswordEntries().size()>0) {
 		        // 2. Find the specific record and update its attributes
 		        for (PasswordPOJO record : passwordEntries) {
-		            if (record.getApplicationName().equals(applicatioName) &&
+		            if (record.getApplicationName().equals(applicationName) &&
 		            		record.getEmailAddress().equals(emailAddress)) {
 		            	String currentPassword = record.getPassword();
 		            	record.setLastPassword(currentPassword);	
@@ -286,25 +286,75 @@ public class PasswordDirectory implements PasswordCSVInterface{
 				break;
 			case 1:
 				for(PasswordPOJO entries : getPasswordEntries()) {
-					if(entries.getApplicationName().equals(applicationName)) {
+					if(entries.getApplicationName().toLowerCase().equals(applicationName.toLowerCase())) {
 						searchResults.add(entries);
 					}else {continue;}
 				}break;
 			case 2:
 				for(PasswordPOJO entries : getPasswordEntries()) {
-					if(entries.getEmailAddress().equals(emailAddress)) {
+					if(entries.getEmailAddress().toLowerCase().equals(emailAddress.toLowerCase())) {
 						searchResults.add(entries);
 					}else {continue;}
 				}break;
 			case 3:
 				for(PasswordPOJO entries : getPasswordEntries()) {
-					if(entries.getApplicationName().equals(applicationName) || entries.getEmailAddress().equals(emailAddress)) {
+					if(entries.getApplicationName().toLowerCase().equals(applicationName.toLowerCase()) || entries.getEmailAddress().toLowerCase().equals(emailAddress.toLowerCase())) {
 						searchResults.add(entries);
 					}else {continue;}
 				}break;
 		} 
 		
 		return searchResults;
+	}
+
+
+
+	@Override
+	public boolean deleteAnEntry(String applicationName, String emailAddress) {
+		boolean recordFound = false;
+		PasswordPOJO deleteEntry = new PasswordPOJO();
+        if(getPasswordEntries().size()>0) {
+	        // 2. Find the specific record and update its attributes
+	        for (PasswordPOJO record : getPasswordEntries()) {
+	            if (record.getApplicationName().equals(applicationName) &&
+	            		record.getEmailAddress().equals(emailAddress)) {
+	            	deleteEntry = record;
+	                recordFound = true;
+	                break; // Exit loop once the target row is updated
+	            }
+	        }
+	        
+	        getPasswordEntries().remove(deleteEntry);
+	        
+	        if (!recordFound) {
+	            throw new IllegalArgumentException("Record was not found in the CSV.");
+	        }
+
+	        // 3. Rewrite the entire file with the updated list
+	        File file = new File(passwordDirectory);
+	        
+	        // Use standard DEFAULT builder with headers. Do NOT skip headers here because we are rebuilding the file.
+	        CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
+	                .setHeader(HEADERS)
+	                .build();
+
+	        // Note: Do NOT pass 'true' to FileWriter here. We want to overwrite the old file entirely.
+	        try (FileWriter out = new FileWriter(file);
+	             CSVPrinter printer = new CSVPrinter(out, csvFormat)) {
+	            
+	            for (PasswordPOJO record : getPasswordEntries()) {
+	                printer.printRecord(record.getDateOfCreation(),record.getApplicationName(),
+	                		record.getEmailAddress(),record.getApplicationType(),
+	                		record.getLastPassword(),record.getPassword());
+	            }
+	            printer.flush();
+	            return true;
+	        } catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+        return false;
 	}
 
 

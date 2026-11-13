@@ -8,9 +8,9 @@ import javax.swing.border.EmptyBorder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import javax.swing.JButton;
-import javax.swing.SpringLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.GridLayout;
 
 
 @Component
@@ -27,6 +27,9 @@ public class UserPage extends JFrame {
 	
 	@Autowired
 	EditPage updPageObj;
+	
+	@Autowired 
+	DeletePage delPageObj;
 	/**
 	 * Launch the application.
 	 */
@@ -47,22 +50,20 @@ public class UserPage extends JFrame {
 	 * Create the frame.
 	 */
 	public UserPage() {
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		SpringLayout sl_contentPane = new SpringLayout();
-		contentPane.setLayout(sl_contentPane);
 		
 		JButton btnAddNew = new JButton("Add New");
-		sl_contentPane.putConstraint(SpringLayout.NORTH, btnAddNew, 49, SpringLayout.NORTH, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.WEST, btnAddNew, 152, SpringLayout.WEST, contentPane);
 		btnAddNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				userDialogObj.setVisible(true);
 			}
 		});
+		contentPane.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		contentPane.add(btnAddNew);
 		
@@ -73,9 +74,6 @@ public class UserPage extends JFrame {
 				updPageObj.setVisible(true);
 			}
 		});
-		sl_contentPane.putConstraint(SpringLayout.NORTH, btnEdit, 23, SpringLayout.SOUTH, btnAddNew);
-		sl_contentPane.putConstraint(SpringLayout.WEST, btnEdit, 152, SpringLayout.WEST, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.EAST, btnEdit, 0, SpringLayout.EAST, btnAddNew);
 		contentPane.add(btnEdit);
 		
 		JButton btnShowAll = new JButton("Show All");
@@ -85,10 +83,24 @@ public class UserPage extends JFrame {
 				passDirectoryObj.setVisible(true);
 			}
 		});
-		sl_contentPane.putConstraint(SpringLayout.NORTH, btnShowAll, 19, SpringLayout.SOUTH, btnEdit);
-		sl_contentPane.putConstraint(SpringLayout.WEST, btnShowAll, 0, SpringLayout.WEST, btnAddNew);
-		sl_contentPane.putConstraint(SpringLayout.EAST, btnShowAll, 0, SpringLayout.EAST, btnAddNew);
+		
+		JButton btnDelete = new JButton("Delete Entry");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				delPageObj.initialize();
+				delPageObj.setVisible(true);
+			}
+		});
+		contentPane.add(btnDelete);
 		contentPane.add(btnShowAll);
+		
+		JButton btnSignOut = new JButton("Sign Out");
+		btnSignOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserPage.this.dispose();
+			}
+		});
+		contentPane.add(btnSignOut);
 
 	}
 }

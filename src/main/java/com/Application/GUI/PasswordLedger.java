@@ -48,6 +48,7 @@ public class PasswordLedger extends JFrame {
 	
 	
 	public void initialize() {
+		setTitle("Password Ledger");
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(null);
 		setLocationRelativeTo(null);
@@ -66,7 +67,7 @@ public class PasswordLedger extends JFrame {
 		    model.addRow(rowData);
 		}
 		showAllJtable = new JTable(model);
-		showAllJtable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		showAllJtable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		showAllScrollPane.setViewportView(showAllJtable);
 	}
 

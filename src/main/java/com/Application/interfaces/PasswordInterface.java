@@ -15,4 +15,5 @@ public interface PasswordInterface {
 	public String updatePasswordEntry(String applicationName, String emailAddress,String updatedPassword);
 	public List<PasswordPOJO> showAllRecords();
 	public List<PasswordPOJO> searchForRecords(String applicationName, String emailAddress);
+	public String deletePasswordEntry(String applicationName, String emailAddress);
 }

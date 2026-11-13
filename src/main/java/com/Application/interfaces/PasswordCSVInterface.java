@@ -18,4 +18,5 @@ public interface PasswordCSVInterface {
 	public boolean checkIfValidEmailAddress(String emailAddress);
 	public boolean writeBackToFile(PasswordPOJO passwrodEntry,String updatedPassword);
 	public List<PasswordPOJO> userSearchForRecords(String applicationName, String emailAddress);
+	public boolean deleteAnEntry(String applicationName, String emailAddress);
 }

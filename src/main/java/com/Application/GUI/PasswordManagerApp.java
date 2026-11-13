@@ -71,7 +71,8 @@ public class PasswordManagerApp {
 		signInBtn.setBackground(UIManager.getColor("Button.darkShadow"));
 		signInBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frmPasswordManager.dispose();
+				frmPasswordManager.setVisible(false);
+				signInPageObj.intialize(frmPasswordManager);
 				signInPageObj.setVisible(true);
 			}
 		});
