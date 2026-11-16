@@ -79,7 +79,6 @@ public class Password implements PasswordInterface{
 
 	@Override
 	public List<PasswordPOJO> searchForRecords(String applicationName, String emailAddress) {
-		System.out.println( passwordDir.userSearchForRecords(applicationName, emailAddress));
 		return passwordDir.userSearchForRecords(applicationName, emailAddress);
 	}
 
@@ -90,10 +89,10 @@ public class Password implements PasswordInterface{
 				applicationName.isEmpty() || emailAddress.isEmpty()) {
 			return "Incorrect input, please check and enter again.";
 		}
-		if(passwordDir.deleteAnEntry(applicationName, emailAddress)) {
-			return "Found the entry and updated the same.";
+		if(!passwordDir.deleteAnEntry(applicationName, emailAddress)) {
+			return "Application and email address are not associated, please check.";
 		}
-		return "The entry not found.";
+		return "Found the entry and deleted the record.";
 	}
     
 	

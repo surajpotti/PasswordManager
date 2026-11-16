@@ -3,9 +3,12 @@ package com.Application.GUI;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.Application.SessionManager.SignInManager;
 
 import java.awt.Font;
 import javax.swing.JButton;
@@ -23,6 +26,12 @@ public class PasswordManagerApp {
 	
 	@Autowired
 	private SignInPage signInPageObj;
+	
+	@Autowired
+	private SignInManager signInManagerObj;
+	
+	@Autowired
+	NewUser newUserObj;
 
 	/**
 	 * Launch the application.
@@ -63,7 +72,8 @@ public class PasswordManagerApp {
 		createBtn.setBackground(UIManager.getColor("Button.darkShadow"));
 		createBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				frmPasswordManager.setVisible(false);
+				newUserObj.setVisible(true);
 			}
 		});
 		
@@ -71,9 +81,14 @@ public class PasswordManagerApp {
 		signInBtn.setBackground(UIManager.getColor("Button.darkShadow"));
 		signInBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frmPasswordManager.setVisible(false);
-				signInPageObj.intialize(frmPasswordManager);
-				signInPageObj.setVisible(true);
+				if(signInManagerObj.checkRunCounter()) {
+					frmPasswordManager.setVisible(false);
+					signInPageObj.intialize(frmPasswordManager);
+					signInPageObj.setVisible(true);
+				}else {
+					JOptionPane.showMessageDialog(null, "No profiles created yet.");
+				}
+				
 			}
 		});
 		

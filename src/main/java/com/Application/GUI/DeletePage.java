@@ -57,14 +57,14 @@ public class DeletePage extends JFrame {
 	 * Create the frame.
 	 */
 	public DeletePage() {
-		initialize();
 	}
 	
-	public void initialize() {
+	public void initialize(JFrame previousFrame) {
 		
 		setTitle("Edit Entry");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, -11, 547, 368);
+		clearAll();
 		setLocationRelativeTo(null);
 		JLabel lblAppName = new JLabel("Application Name");
 		lblAppName.setBounds(18, 40, 85, 14);
@@ -164,12 +164,16 @@ public class DeletePage extends JFrame {
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				if(((!updAppNameField.getText().isEmpty() && !updEmailAddField.getText().isEmpty()))){
-					JOptionPane.showMessageDialog(null, passObj.deletePasswordEntry(updAppNameField.getText(),updEmailAddField.getText()));
+				if(!updAppNameField.getText().isEmpty() && !updEmailAddField.getText().isEmpty()){
+	
+					int response = JOptionPane.showConfirmDialog(btnDelete, "Are you sure?");
+					if(response == JOptionPane.YES_OPTION)
+						JOptionPane.showMessageDialog(null, passObj.deletePasswordEntry(updAppNameField.getText(),updEmailAddField.getText()));
+					else
+						return;
 				}else {
-					JOptionPane.showMessageDialog(null, "Incorrect input please check and update.");
+					JOptionPane.showMessageDialog(null, "Application name and email address not associated, please check.");
 				}
-		
 			}
 		});
 		btnDelete.setBounds(148, 266, 148, 23);
@@ -179,6 +183,31 @@ public class DeletePage extends JFrame {
 		separator_2.setBounds(18, 27, 85, 2);
 		getContentPane().add(separator_2);
 		
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				callCancelMethod(previousFrame);
+			}
+		});
+		btnCancel.setBounds(412, 266, 89, 23);
+		getContentPane().add(btnCancel);
 		
 	}
+	
+	protected void callCancelMethod(JFrame previousFrame) {
+		clearAll();
+		this.dispose();
+		previousFrame.setVisible(true);
+	}
+	
+	protected void clearAll() {
+		if(appNameField!= null && emailAddField!=null && updAppNameField!=null && updEmailAddField!=null) {
+			appNameField.setText("");
+			emailAddField.setText("");
+			updAppNameField.setText("");
+			updEmailAddField.setText("");
+		}
+		return;
+	}
+	
 }

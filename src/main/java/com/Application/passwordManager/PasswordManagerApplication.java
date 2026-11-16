@@ -10,7 +10,6 @@ import org.springframework.context.ApplicationContext;
 
 import com.Application.FeatureClasses.Password;
 import com.Application.GUI.PasswordManagerApp;
-import com.Application.JMXExposer.PasswordMBeanFactory;
 
 @SpringBootApplication(scanBasePackages = "com.Application")
 public class PasswordManagerApplication {

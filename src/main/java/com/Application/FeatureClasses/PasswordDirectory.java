@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import javax.management.MXBean;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -273,13 +272,15 @@ public class PasswordDirectory implements PasswordCSVInterface{
 		int queryPassed = 0;
 		if(applicationName.isBlank() && emailAddress.isBlank()){
 			queryPassed = 0;
-		}else if(!applicationName.isBlank() || emailAddress.isBlank()) {
+		}else if(!applicationName.isBlank() && emailAddress.isBlank()) {
 			queryPassed = 1;
-		}else if(applicationName.isBlank() || !emailAddress.isBlank()) {
+		}else if(applicationName.isBlank() && !emailAddress.isBlank()) {
 			queryPassed = 2;
 		}else {
 			queryPassed = 3;
 		}
+		
+		
 		System.out.println("Query selected: " + queryPassed);
 		switch(queryPassed) {
 			case 0: 
@@ -311,6 +312,8 @@ public class PasswordDirectory implements PasswordCSVInterface{
 
 	@Override
 	public boolean deleteAnEntry(String applicationName, String emailAddress) {
+		
+		
 		boolean recordFound = false;
 		PasswordPOJO deleteEntry = new PasswordPOJO();
         if(getPasswordEntries().size()>0) {
@@ -327,7 +330,8 @@ public class PasswordDirectory implements PasswordCSVInterface{
 	        getPasswordEntries().remove(deleteEntry);
 	        
 	        if (!recordFound) {
-	            throw new IllegalArgumentException("Record was not found in the CSV.");
+	            System.err.print("Record was not found in the CSV.");
+	            return false;
 	        }
 
 	        // 3. Rewrite the entire file with the updated list

@@ -20,7 +20,7 @@ public class UserPage extends JFrame {
 	private JPanel contentPane;
 	
 	@Autowired
-	UserDialog userDialogObj;
+	NewEntryPage userDialogObj;
 	
 	@Autowired
 	PasswordLedger passDirectoryObj;
@@ -50,6 +50,11 @@ public class UserPage extends JFrame {
 	 * Create the frame.
 	 */
 	public UserPage() {
+		super();
+
+	}
+	
+	public void initialize(JFrame previousFrame) {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -61,6 +66,7 @@ public class UserPage extends JFrame {
 		btnAddNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				userDialogObj.setVisible(true);
+				userDialogObj.initialize();
 			}
 		});
 		contentPane.setLayout(new GridLayout(0, 1, 0, 0));
@@ -87,7 +93,7 @@ public class UserPage extends JFrame {
 		JButton btnDelete = new JButton("Delete Entry");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				delPageObj.initialize();
+				delPageObj.initialize(UserPage.this);
 				delPageObj.setVisible(true);
 			}
 		});
@@ -98,9 +104,9 @@ public class UserPage extends JFrame {
 		btnSignOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				UserPage.this.dispose();
+				previousFrame.setVisible(true);
 			}
 		});
 		contentPane.add(btnSignOut);
-
 	}
 }

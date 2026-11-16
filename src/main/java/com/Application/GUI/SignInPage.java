@@ -63,6 +63,7 @@ public class SignInPage extends JFrame {
 	}
 	
 	public void intialize(JFrame previousFrame) {
+		
 		setTitle("Sign In");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -96,8 +97,11 @@ public class SignInPage extends JFrame {
 		JButton signInButton = new JButton("Sign In");
 		signInButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(signInObj.signIn(usernameTxtField.getText(), new String(passwordTxtField.getPassword()))){
+				if(signInObj.adminSignIn(usernameTxtField.getText(), new String(passwordTxtField.getPassword()))){
 					System.out.print("Correct password");
+					clearAll();
+					SignInPage.this.dispose();
+					userPage.initialize(SignInPage.this);
 					userPage.setVisible(true);
 					//JOptionPane.showMessageDialog(null, "Correct username and password");
 					
@@ -122,12 +126,15 @@ public class SignInPage extends JFrame {
 		
 	}
 
-
 	
 	protected void callCancelMethod(JFrame previousFrame) {
 		this.dispose();
 		previousFrame.setVisible(true);
 	}
 	
+	protected void clearAll() {
+		usernameTxtField.setText("");
+		passwordTxtField.setText("");
+	}
 
 }

@@ -16,7 +16,6 @@ import javax.management.NotCompliantMBeanException;
 import javax.management.ObjectName;
 import javax.management.StandardMBean;
 
-import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.stereotype.Service;
 
 import com.Application.FeatureClasses.Password;
@@ -50,7 +49,7 @@ public class PasswordMBeanFactory{
      * Scans the specified package and ALL its subpackages recursively, 
      * registering anything conforming to JMX standards or custom annotations.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
 	public void registerPackage(String basePackageName) {
         try {
             MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();

@@ -2,8 +2,14 @@ package com.Application.SessionManager;
 
 
 
+import java.io.IOException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import com.Application.PasswordManagerConfig.ApplicationConfiguration;
+import com.Application.PasswordManagerConfig.UserProfiles;
 
 import jakarta.annotation.PostConstruct;
 
@@ -12,12 +18,22 @@ import jakarta.annotation.PostConstruct;
 public class SignInManager {
 	
 
+	@Autowired
+	UserProfiles userProfileObj;
+	
+	@Autowired
+	ApplicationConfiguration appConfigObj;
+	
 	// Spring pulls individual values straight out of your custom properties file
     @Value("${password-manager.userName}")
     private String configUsername;
 
     @Value("${password-manager.password}") // :0 provides a default fallback if missing
     private String configPassword;
+    
+    @Value("${password-manager.profileCount}")
+    private int profileCount;
+    
     
     
     
@@ -33,41 +49,12 @@ public class SignInManager {
 	   	System.out.println("At init, the Username: " + this.configUsername + ", Password: " + this.configPassword);	
    }
 	
-   
 
-    /**
-	* @return the configUsername
-	*/
-	public String getConfigUsername() {
-		return configUsername;
-	}
-
-   /**
-    * @param configUsername the configUsername to set
-    */
-   public void setConfigUsername(String configUsername) {
-	this.configUsername = configUsername;
-   }
-
-   /**
-    * @return the configPassword
-    */
-   public String getConfigPassword() {
-	return configPassword;
-   }
-
-   /**
-    * @param configPassword the configPassword to set
-    */
-   public void setConfigPassword(String configPassword) {
-	this.configPassword = configPassword;
-   }
-
-   public boolean signIn(String username, String password) {
+   public boolean adminSignIn(String username, String password) {
 	   
 	   if(escapeSpecialCharacters(username)!=null || escapeSpecialCharacters(password)!=null) {
-		   if(escapeSpecialCharacters(this.getConfigUsername()).equals(escapeSpecialCharacters(username)) && 
-				   escapeSpecialCharacters(this.getConfigPassword()).equals(escapeSpecialCharacters(password))) {
+		   if(escapeSpecialCharacters(appConfigObj.getUserName()).equals(escapeSpecialCharacters(username)) && 
+				   escapeSpecialCharacters(appConfigObj.getPassword()).equals(escapeSpecialCharacters(password))) {
 			   System.out.print("Returned true");
 			   return true;
 		   }
@@ -84,5 +71,39 @@ public class SignInManager {
        return escapedData;
    }
     
+   
+   public boolean userSignIn(String username, String password) {
+	   
+	   if(escapeSpecialCharacters(username)!=null || escapeSpecialCharacters(password)!=null) {
+		   if(escapeSpecialCharacters(appConfigObj.getUserName()).equals(escapeSpecialCharacters(username)) && 
+				   escapeSpecialCharacters(appConfigObj.getPassword()).equals(escapeSpecialCharacters(password))) {
+			   System.out.print("Returned true");
+			   return true;
+		   }
+	   }
+	return false;
+	   
+   }
+   
+   
+   public boolean createNewUser(String name, String username, String password) {
+	   if(!userProfileObj.getAllUsers().containsKey(name)) {
+		   try {
+			userProfileObj.saveOrUpdateUser(name, username, password);
+			return true;
+		   } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		   }
+	   }
+	   return false;
+   }
+   
+   public boolean checkRunCounter() {
+	   if(appConfigObj.getProfileCount() > 0) {
+		   return true;
+	   }
+	   return false;
+   }
 
 }

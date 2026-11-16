@@ -16,6 +16,7 @@ import com.Application.POJO.PasswordPOJO;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JPasswordField;
@@ -37,7 +38,8 @@ public class EditPage extends JFrame {
 	private JPasswordField cnfPasswordField;
 	private JTextField updAppNameField;
 	private JTextField updEmailAddField;
-
+	private List<PasswordPOJO> searchedResults;
+	
 	String passwordFieldStr = "";
 	String cnfPasswordFieldStr = "";
 
@@ -68,7 +70,7 @@ public class EditPage extends JFrame {
 	public void initialize() {
 		
 		setTitle("Edit Entry");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 543, 441);
 		setLocationRelativeTo(null);
 		JLabel lblAppName = new JLabel("Application Name");
@@ -96,14 +98,15 @@ public class EditPage extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				tableModel.setRowCount(0);
-				if(!passObj.searchForRecords(appNameField.getText(), emailAddField.getText()).isEmpty()) {
+				searchedResults = passObj.searchForRecords(appNameField.getText(), emailAddField.getText());
+				if(!searchedResults.isEmpty()) {
 					tableModel.setColumnCount(0);
 					String[] columns = {"Date of Creation","Application Name", "Email ID", "Application Type", "Last Password", "Latest Password"};
 					tableModel.setColumnIdentifiers(columns);
-					for(PasswordPOJO record : passObj.searchForRecords(appNameField.getText(), emailAddField.getText())) {
+					for(PasswordPOJO record : searchedResults) {
 						Object[] rowData = { record.getDateOfCreation(),record.getApplicationName(), record.getEmailAddress(),
 								record.getApplicationType(),record.getLastPassword(),record.getPassword()};
-						//searchedEntries.add(record);
+						
 						tableModel.addRow(rowData);
 					}
 				}
