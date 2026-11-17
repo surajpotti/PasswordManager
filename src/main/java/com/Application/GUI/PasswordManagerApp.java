@@ -73,6 +73,7 @@ public class PasswordManagerApp {
 		createBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frmPasswordManager.setVisible(false);
+				newUserObj.initialize(frmPasswordManager);
 				newUserObj.setVisible(true);
 			}
 		});
@@ -81,7 +82,7 @@ public class PasswordManagerApp {
 		signInBtn.setBackground(UIManager.getColor("Button.darkShadow"));
 		signInBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(signInManagerObj.checkRunCounter()) {
+				if(signInManagerObj.checkProfileCounter()) {
 					frmPasswordManager.setVisible(false);
 					signInPageObj.intialize(frmPasswordManager);
 					signInPageObj.setVisible(true);

@@ -8,22 +8,26 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
+import org.springframework.core.env.StandardEnvironment;
 
 @Configuration
-@ConfigurationProperties(prefix = "user")
+@ConfigurationProperties(prefix = "user.accounts")
 @PropertySource("classpath:userprofile.properties") 
 public class UserProfiles {
 	
 	
-	private static final String FILE_PATH = "config/users.properties";
+	private static final String FILE_PATH = "src/main/resources/userprofile.properties";
     private static final String PROPERTY_SOURCE_NAME = "URL [file:" + FILE_PATH + "]";
 
-    private  ConfigurableEnvironment environment;
+    private  ConfigurableEnvironment environment = new StandardEnvironment();
 
     // Spring automatically populates this map at startup from users.properties
     private Map<String, ProfilePOJO> accounts = new ConcurrentHashMap<>();
@@ -51,20 +55,46 @@ public class UserProfiles {
     }
 
     // CREATE or UPDATE
-    public synchronized void saveOrUpdateUser(String name,String username, String password) throws IOException {
-        Properties props = loadFromDisk();
-        props.setProperty("user.accounts." + name + ".name", username);
-        props.setProperty("user.accounts." + name + ".password", password);
-        saveToDisk(props);
+    public synchronized boolean saveOrUpdateUser(String name,String username, String password) {
+    
+    
+		try {
+			File file = new File(FILE_PATH);
+	        if (!file.exists()) {
+	            file.getParentFile().mkdirs();
+	            file.createNewFile();
+	        }
+			Parameters params = new Parameters();
+		    FileBasedConfigurationBuilder<PropertiesConfiguration> builder =
+		        new FileBasedConfigurationBuilder<>(PropertiesConfiguration.class)
+		            .configure(params.fileBased().setFile(file));
 
-        // Update local map directly
-        ProfilePOJO detail = new ProfilePOJO();
-        detail.setUserName(username);
-        detail.setUserName(password);
-        this.accounts.put(name, detail);
+		    // Loads existing file while preserving comments, blank lines, and key order
+		    PropertiesConfiguration config = builder.getConfiguration();
 
-        // Sync Spring's @PropertySource in ConfigurableEnvironment
-        refreshEnvironment(props);
+		    // Adds new keys at the bottom or updates existing keys in-place
+		    config.setProperty("user.accounts.name", name);
+		    config.setProperty("user.accounts.username", username);
+		    config.setProperty("user.accounts.password", password);
+
+		    // Saves cleanly without overwriting unrelated entries
+		    builder.save();
+	
+	        // Update local map directly
+	        ProfilePOJO detail = new ProfilePOJO();
+	        detail.setUserName(username);
+	        detail.setUserName(password);
+	        this.accounts.put(username, detail);
+	
+	        // Sync Spring's @PropertySource in ConfigurableEnvironment
+	        refreshEnvironment(loadFromDisk());
+	        return true;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+    	
+    	
     }
 
     // DELETE
@@ -110,6 +140,5 @@ public class UserProfiles {
         }
     }
 
-  
 
 }

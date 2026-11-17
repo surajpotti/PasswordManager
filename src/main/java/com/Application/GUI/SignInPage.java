@@ -97,17 +97,30 @@ public class SignInPage extends JFrame {
 		JButton signInButton = new JButton("Sign In");
 		signInButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(signInObj.adminSignIn(usernameTxtField.getText(), new String(passwordTxtField.getPassword()))){
-					System.out.print("Correct password");
-					clearAll();
-					SignInPage.this.dispose();
-					userPage.initialize(SignInPage.this);
-					userPage.setVisible(true);
-					//JOptionPane.showMessageDialog(null, "Correct username and password");
+				
+				if(usernameTxtField.getText()!=null && passwordTxtField.getPassword()!=null) {
+					int result = signInObj.userSignIn(usernameTxtField.getText(), new String(passwordTxtField.getPassword()));
+									
+					switch(result) {
+						case 1:
+							JOptionPane.showMessageDialog(null, "Incorrect username or password.");
+							break;
+						case 2:
+							JOptionPane.showMessageDialog(null, "Correct username and password");
+							clearAll();
+							SignInPage.this.dispose();
+							userPage.initialize(SignInPage.this);
+							userPage.setVisible(true);
+							break;
+						case 3:
+							JOptionPane.showMessageDialog(null, "Incorrect password.");
+							
+						default:
+							break;
+					}
 					
-				}
-				else {
-					JOptionPane.showMessageDialog(null, "Incorrect username and password");
+				}else {
+					JOptionPane.showMessageDialog(null, "Input cannot be blank.");
 				}
 			}
 		});

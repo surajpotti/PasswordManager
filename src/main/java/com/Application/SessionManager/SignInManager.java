@@ -2,10 +2,8 @@ package com.Application.SessionManager;
 
 
 
-import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.Application.PasswordManagerConfig.ApplicationConfiguration;
@@ -21,18 +19,10 @@ public class SignInManager {
 	@Autowired
 	UserProfiles userProfileObj;
 	
+	
 	@Autowired
 	ApplicationConfiguration appConfigObj;
 	
-	// Spring pulls individual values straight out of your custom properties file
-    @Value("${password-manager.userName}")
-    private String configUsername;
-
-    @Value("${password-manager.password}") // :0 provides a default fallback if missing
-    private String configPassword;
-    
-    @Value("${password-manager.profileCount}")
-    private int profileCount;
     
     
     
@@ -46,7 +36,7 @@ public class SignInManager {
 
 	   	System.out.println("The init method in the SignInManager class is called.");	
 
-	   	System.out.println("At init, the Username: " + this.configUsername + ", Password: " + this.configPassword);	
+	   	System.out.println("At init, the Username: " + appConfigObj.getUserName() + ", Password: " + appConfigObj.getPassword());	
    }
 	
 
@@ -72,34 +62,32 @@ public class SignInManager {
    }
     
    
-   public boolean userSignIn(String username, String password) {
+   public int userSignIn(String username, String password) {
 	   
-	   if(escapeSpecialCharacters(username)!=null || escapeSpecialCharacters(password)!=null) {
-		   if(escapeSpecialCharacters(appConfigObj.getUserName()).equals(escapeSpecialCharacters(username)) && 
-				   escapeSpecialCharacters(appConfigObj.getPassword()).equals(escapeSpecialCharacters(password))) {
-			   System.out.print("Returned true");
-			   return true;
+	   if(userProfileObj.getAllUsers().containsKey(username)) {
+		   if(userProfileObj.getAccounts().get(username).getPassword().equals(password)) {
+			   return 2;
+		   }else {
+			   return 3;
 		   }
+	   }else {
+		   return 1;
 	   }
-	return false;
 	   
    }
    
-   
-   public boolean createNewUser(String name, String username, String password) {
+ 
+   public String createNewUser(String name, String username, String password) {
 	   if(!userProfileObj.getAllUsers().containsKey(name)) {
-		   try {
-			userProfileObj.saveOrUpdateUser(name, username, password);
-			return true;
-		   } catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		   if(userProfileObj.saveOrUpdateUser(name, username, password)) {
+			   appConfigObj.updatepProfileCounter();
+		   	return "Profile created for the: " + name;
 		   }
 	   }
-	   return false;
+	   return "Could not create profile for : " + name;
    }
    
-   public boolean checkRunCounter() {
+   public boolean checkProfileCounter() {
 	   if(appConfigObj.getProfileCount() > 0) {
 		   return true;
 	   }

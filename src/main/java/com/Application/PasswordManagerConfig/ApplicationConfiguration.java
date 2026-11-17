@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
+import org.springframework.core.env.StandardEnvironment;
 
 
 @Configuration
@@ -23,10 +24,10 @@ public class ApplicationConfiguration {
 	private String password;
 	
 	
-	private static final String FILE_PATH = "config/users.properties";
+	private static final String FILE_PATH = "src/main/resources/password-manager.properties";
     private static final String PROPERTY_SOURCE_NAME = "URL [file:" + FILE_PATH + "]";
 
-    private ConfigurableEnvironment environment;
+    private  ConfigurableEnvironment environment = new StandardEnvironment();
 	
 	public ApplicationConfiguration() {
 		super();
@@ -70,33 +71,21 @@ public class ApplicationConfiguration {
 		this.password = password;
 	}
 	
-//	public void updateCredentials(String userName, String password) {
-//        this.userName = userName;
-//        this.password = password;
-//
-//        Properties props = new Properties();
-//        props.setProperty("passwordManager.userName", String.valueOf(this.userName));
-//        props.setProperty("passwordManager.password", this.password);
-//
-//        // 2. Point target directly to the custom file path
-//        String filePath = "src/main/resources/passwordManager.properties"; 
-//        try (FileOutputStream out = new FileOutputStream(filePath)) {
-//            props.store(out, "Updated Custom Settings File");
-//            System.out.println("💾 Custom properties successfully saved!");
-//        } catch (IOException e) {
-//            System.err.println("❌ Failed to save custom properties: " + e.getMessage());
-//        }
-//    }
+
 	
 	// CREATE or UPDATE
-    public synchronized void updatepProfileCounter() throws IOException {
-        Properties props = loadFromDisk();
-        int count = getProfileCount() + 1;
-        props.setProperty("password-manager.profileCount", Integer.toString(count));
-        saveToDisk(props);
-
-        // Sync Spring's @PropertySource in ConfigurableEnvironment
-        refreshEnvironment(props);
+    public synchronized void updatepProfileCounter(){
+    	try {
+	        Properties props = loadFromDisk();
+	        int count = getProfileCount() + 1;
+	        props.setProperty("password-manager.profileCount", Integer.toString(count));
+	        saveToDisk(props);
+	
+	        // Sync Spring's @PropertySource in ConfigurableEnvironment
+	        refreshEnvironment(props);
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}
     }
     
     private void refreshEnvironment(Properties updatedProps) {
