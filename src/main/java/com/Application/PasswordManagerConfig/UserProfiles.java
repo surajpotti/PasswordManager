@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -22,6 +23,10 @@ import org.springframework.core.env.StandardEnvironment;
 @ConfigurationProperties(prefix = "user.accounts")
 @PropertySource("classpath:userprofile.properties") 
 public class UserProfiles {
+	
+	
+	@Autowired
+	ApplicationConfiguration appConfigObj;
 	
 	
 	private static final String FILE_PATH = "src/main/resources/userprofile.properties";
@@ -72,10 +77,11 @@ public class UserProfiles {
 		    // Loads existing file while preserving comments, blank lines, and key order
 		    PropertiesConfiguration config = builder.getConfiguration();
 
+		    String uniqueID = Integer.toString(appConfigObj.getProfileCount()+1);
 		    // Adds new keys at the bottom or updates existing keys in-place
-		    config.setProperty("user.accounts.name", name);
-		    config.setProperty("user.accounts.username", username);
-		    config.setProperty("user.accounts.password", password);
+		    config.setProperty("user.accounts.prof" + uniqueID + ".name", name);
+		    config.setProperty("user.accounts.prof" + uniqueID + ".username", username);
+		    config.setProperty("user.accounts.prof" + uniqueID + ".password", password);
 
 		    // Saves cleanly without overwriting unrelated entries
 		    builder.save();
@@ -83,9 +89,9 @@ public class UserProfiles {
 	        // Update local map directly
 	        ProfilePOJO detail = new ProfilePOJO();
 	        detail.setUserName(username);
-	        detail.setUserName(password);
+	        detail.setPassword(password);
+	        detail.setName(name);
 	        this.accounts.put(username, detail);
-	
 	        // Sync Spring's @PropertySource in ConfigurableEnvironment
 	        refreshEnvironment(loadFromDisk());
 	        return true;
@@ -97,7 +103,7 @@ public class UserProfiles {
     	
     }
 
-    // DELETE
+	// DELETE
     public synchronized boolean deleteUser(String id) throws IOException {
         Properties props = loadFromDisk();
         Object removedName = props.remove("user.accounts." + id + ".name");

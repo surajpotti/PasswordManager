@@ -176,6 +176,7 @@ public class NewUser extends JDialog {
 						}else {
 							JOptionPane.showMessageDialog(null,"Please do not leave any field empty.");
 						}
+						clearAll();
 					}
 				});
 				okButton.setActionCommand("OK");
@@ -197,7 +198,7 @@ public class NewUser extends JDialog {
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						clearAll();
-						NewUser.this.dispose();
+						dispose();
 						previousFrame.setVisible(true);
 					}
 				});

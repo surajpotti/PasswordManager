@@ -23,9 +23,7 @@ public class SignInManager {
 	@Autowired
 	ApplicationConfiguration appConfigObj;
 	
-    
-    
-    
+	
     
    public SignInManager() {
 		super();
@@ -63,9 +61,9 @@ public class SignInManager {
     
    
    public int userSignIn(String username, String password) {
-	   
+	   System.out.println(userProfileObj.getAllUsers());
 	   if(userProfileObj.getAllUsers().containsKey(username)) {
-		   if(userProfileObj.getAccounts().get(username).getPassword().equals(password)) {
+		   if(userProfileObj.getAllUsers().get(username).getPassword().equals(password)) {
 			   return 2;
 		   }else {
 			   return 3;

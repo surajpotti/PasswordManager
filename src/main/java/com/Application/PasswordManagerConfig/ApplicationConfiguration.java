@@ -43,7 +43,7 @@ public class ApplicationConfiguration {
 	/**
 	 * @param runCounter the runCounter to set
 	 */
-	public void setProfieCount(int profileCount) {
+	public void setProfileCount(int profileCount) {
 		this.profileCount = profileCount;
 	}
 	/**
@@ -71,13 +71,13 @@ public class ApplicationConfiguration {
 		this.password = password;
 	}
 	
-
 	
 	// CREATE or UPDATE
     public synchronized void updatepProfileCounter(){
     	try {
 	        Properties props = loadFromDisk();
 	        int count = getProfileCount() + 1;
+	        setProfileCount(count);
 	        props.setProperty("password-manager.profileCount", Integer.toString(count));
 	        saveToDisk(props);
 	

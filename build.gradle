@@ -25,6 +25,8 @@ dependencies {
 	implementation 'com.jgoodies:jgoodies-forms:1.9.0'
     implementation 'com.jgoodies:jgoodies-looks:2.7.0'
     implementation 'com.jgoodies:jgoodies-common:1.8.1'
+    implementation 'org.apache.commons:commons-configuration2:2.11.0'
+    implementation 'commons-beanutils:commons-beanutils:1.9.4'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
