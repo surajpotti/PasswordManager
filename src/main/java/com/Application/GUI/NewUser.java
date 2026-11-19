@@ -59,7 +59,7 @@ public class NewUser extends JDialog {
 	}
 	
 	public void initialize(JFrame previousFrame) {
-		//clearAll();
+		clearAll();
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -210,8 +210,8 @@ public class NewUser extends JDialog {
 	}
 	
 	private void clearAll() {
-		if(yourNameField.getText()!= null && usernameField.getText()!= null
-				&& passwordField.getPassword()!=null && cnfPasswordField.getPassword()!=null) {
+		if(yourNameField!= null && usernameField!= null
+				&& passwordField!=null && cnfPasswordField!=null) {
 			yourNameField.setText("");
 			usernameField.setText("");
 			passwordField.setText("");

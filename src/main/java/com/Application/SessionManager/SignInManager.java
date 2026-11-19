@@ -61,6 +61,7 @@ public class SignInManager {
     
    
    public int userSignIn(String username, String password) {
+	   System.out.println("Passed inputs, Username: " + username + ", Password: " +password);
 	   System.out.println(userProfileObj.getAllUsers());
 	   if(userProfileObj.getAllUsers().containsKey(username)) {
 		   if(userProfileObj.getAllUsers().get(username).getPassword().equals(password)) {

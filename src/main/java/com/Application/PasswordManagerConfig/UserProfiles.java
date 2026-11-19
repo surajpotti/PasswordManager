@@ -11,7 +11,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -19,14 +18,15 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.core.env.StandardEnvironment;
 
+import jakarta.annotation.PostConstruct;
+
+
 @Configuration
-@ConfigurationProperties(prefix = "user.accounts")
+@ConfigurationProperties(prefix = "user")
 @PropertySource("classpath:userprofile.properties") 
 public class UserProfiles {
 	
 	
-	@Autowired
-	ApplicationConfiguration appConfigObj;
 	
 	
 	private static final String FILE_PATH = "src/main/resources/userprofile.properties";
@@ -38,6 +38,7 @@ public class UserProfiles {
     private Map<String, ProfilePOJO> accounts = new ConcurrentHashMap<>();
 
     public UserProfiles() {
+    	
     }
 
     // Required Getters & Setters for @ConfigurationProperties binding
@@ -58,7 +59,13 @@ public class UserProfiles {
     public ProfilePOJO getUser(String name) {
         return this.accounts.get(name);
     }
-
+    
+    @PostConstruct
+    public void init() {
+    	System.out.println("Loading the user accounts: " + getAllUsers());
+    }
+    
+    
     // CREATE or UPDATE
     public synchronized boolean saveOrUpdateUser(String name,String username, String password) {
     
@@ -77,20 +84,19 @@ public class UserProfiles {
 		    // Loads existing file while preserving comments, blank lines, and key order
 		    PropertiesConfiguration config = builder.getConfiguration();
 
-		    String uniqueID = Integer.toString(appConfigObj.getProfileCount()+1);
 		    // Adds new keys at the bottom or updates existing keys in-place
-		    config.setProperty("user.accounts.prof" + uniqueID + ".name", name);
-		    config.setProperty("user.accounts.prof" + uniqueID + ".username", username);
-		    config.setProperty("user.accounts.prof" + uniqueID + ".password", password);
+		    config.setProperty("user.accounts." + name + ".username", username);
+		    config.setProperty("user.accounts." +  name +".password", password);
 
 		    // Saves cleanly without overwriting unrelated entries
 		    builder.save();
 	
+		    System.out.println("The username here: " + username);
 	        // Update local map directly
 	        ProfilePOJO detail = new ProfilePOJO();
 	        detail.setUserName(username);
 	        detail.setPassword(password);
-	        detail.setName(name);
+	        System.out.println("The username here: " + username);
 	        this.accounts.put(username, detail);
 	        // Sync Spring's @PropertySource in ConfigurableEnvironment
 	        refreshEnvironment(loadFromDisk());
