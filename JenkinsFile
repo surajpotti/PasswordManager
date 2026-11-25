@@ -1,7 +1,7 @@
 pipeline {
     agent { 
         node {
-            label 'Project_101_Docker'
+            label 'docker-agent'
             }
       }
     tools{
