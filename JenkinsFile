@@ -22,10 +22,15 @@ pipeline {
 		bat './gradlew test'
             }
         }
-        stage('Archive') {
+        stage('Package') {
             steps {
-                archiveArtifacts artifacts: 'build/libs/*.jar', fingerprint: true
+                bat 'gradlew.bat bootJar'   // replace with your task name
             }
         }
+        //stage('Archive') {
+        //    steps {
+        //        archiveArtifacts artifacts: 'build/libs/*.jar', fingerprint: true
+        //    }
+        //}
     }
 }
