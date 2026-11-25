@@ -1,11 +1,11 @@
 pipeline {
     agent { 
         node {
-            label 'docker-agent'
+            label 'Project_101_Docker'
             }
       }
     tools{
-	jdk 'jdk-21'
+		jdk 'jdk-21'
     }
     triggers {
         pollSCM '* * * * *'
