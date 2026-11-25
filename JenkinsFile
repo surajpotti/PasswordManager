@@ -22,6 +22,11 @@ pipeline {
 		bat './gradlew test'
             }
         }
+        stage('Build dependencies') {
+			steps {
+				bat 'gradlew.bat copyDependencies'
+			}
+		}
         stage('Package') {
             steps {
                 bat 'gradlew.bat bootJar'   // replace with your task name
