@@ -67,11 +67,11 @@ public class EditPage extends JFrame {
 		//initialize();
 	}
 	
-	public void initialize() {
-		
+	public void initialize(JFrame previousFrame) {
+		clearAll();
 		setTitle("Edit Entry");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 543, 441);
+		
+		setBounds(100, 100, 541, 380);
 		setLocationRelativeTo(null);
 		JLabel lblAppName = new JLabel("Application Name");
 		lblAppName.setBounds(18, 40, 85, 14);
@@ -119,7 +119,7 @@ public class EditPage extends JFrame {
 		getContentPane().add(appNameField);
 		
         table = new JTable(tableModel);
-        table.setBounds(247, 40, 274, 79);
+        table.setBounds(247, 37, 274, 82);
         table.setFillsViewportHeight(true);
         table.setEnabled(false);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -150,7 +150,7 @@ public class EditPage extends JFrame {
 		getContentPane().add(lblUpdateAppName);
 		
 		updAppNameField = new JTextField();
-		updAppNameField.setBounds(122, 198, 167, 20);
+		updAppNameField.setBounds(122, 198, 115, 20);
 		getContentPane().add(updAppNameField);
 		updAppNameField.setColumns(10);
 		
@@ -158,11 +158,11 @@ public class EditPage extends JFrame {
 		
 		
 		JLabel lblUpdateEmailAdd = new JLabel("Email Address");
-		lblUpdateEmailAdd.setBounds(11, 227, 68, 14);
+		lblUpdateEmailAdd.setBounds(257, 201, 68, 14);
 		getContentPane().add(lblUpdateEmailAdd);
 		
 		updEmailAddField = new JTextField();
-		updEmailAddField.setBounds(122, 224, 167, 20);
+		updEmailAddField.setBounds(354, 198, 120, 20);
 		getContentPane().add(updEmailAddField);
 		updEmailAddField.setColumns(10);
 		
@@ -171,21 +171,21 @@ public class EditPage extends JFrame {
 		getContentPane().add(lblNewLabel_1);
 		
 		passwordField = new JPasswordField();
-		passwordField.setBounds(122, 250, 167, 20);
+		passwordField.setBounds(122, 250, 115, 20);
 		getContentPane().add(passwordField);
 		
 		
 		JLabel lblNewLabel_2 = new JLabel("Confirm Password");
-		lblNewLabel_2.setBounds(11, 279, 87, 14);
+		lblNewLabel_2.setBounds(257, 253, 87, 14);
 		getContentPane().add(lblNewLabel_2);
 		
 		cnfPasswordField = new JPasswordField();
-		cnfPasswordField.setBounds(122, 276, 167, 20);
+		cnfPasswordField.setBounds(354, 250, 120, 20);
 		getContentPane().add(cnfPasswordField);
 		
 		
 		JButton btnReset = new JButton("Reset");
-		btnReset.setBounds(11, 346, 120, 23);
+		btnReset.setBounds(70, 302, 120, 23);
 		getContentPane().add(btnReset);
 		
 		JButton btnUpdate = new JButton("Update");
@@ -203,12 +203,33 @@ public class EditPage extends JFrame {
 		
 			}
 		});
-		btnUpdate.setBounds(141, 346, 148, 23);
+		btnUpdate.setBounds(214, 302, 120, 23);
 		getContentPane().add(btnUpdate);
 		
-		
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				clearAll();
+				setVisible(false);
+			}
+		});
+		btnCancel.setBounds(354, 302, 120, 23);
+		getContentPane().add(btnCancel);
+	
 	}
 	
 	
+	private void clearAll() {
 	
+		if(appNameField!=null && emailAddField!=null && updAppNameField!=null && updEmailAddField!=null
+				&& cnfPasswordField!=null && passwordField.getPassword()!=null) {
+			appNameField.setText("");
+			emailAddField.setText("");
+			updAppNameField.setText("");
+			updEmailAddField.setText("");
+			passwordField.setText("");
+			cnfPasswordField.setText("");
+		}
+		return;
+	}
 }

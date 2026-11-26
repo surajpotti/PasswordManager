@@ -198,7 +198,7 @@ public class NewUser extends JDialog {
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						clearAll();
-						dispose();
+						setVisible(false);
 						previousFrame.setVisible(true);
 					}
 				});
@@ -212,6 +212,7 @@ public class NewUser extends JDialog {
 	private void clearAll() {
 		if(yourNameField!= null && usernameField!= null
 				&& passwordField!=null && cnfPasswordField!=null) {
+
 			yourNameField.setText("");
 			usernameField.setText("");
 			passwordField.setText("");
@@ -219,4 +220,6 @@ public class NewUser extends JDialog {
 		}
 		return;
 	}
+	
+
 }

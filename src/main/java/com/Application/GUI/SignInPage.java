@@ -65,7 +65,6 @@ public class SignInPage extends JFrame {
 	public void intialize(JFrame previousFrame) {
 		
 		setTitle("Sign In");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -108,7 +107,7 @@ public class SignInPage extends JFrame {
 						case 2:
 							JOptionPane.showMessageDialog(null, "Correct username and password");
 							clearAll();
-							SignInPage.this.dispose();
+							setVisible(false);
 							userPage.initialize(SignInPage.this);
 							userPage.setVisible(true);
 							break;
@@ -132,7 +131,9 @@ public class SignInPage extends JFrame {
 		btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				callCancelMethod(previousFrame);
+				setVisible(false);
+				previousFrame.setVisible(true);
+			
 			}
 		});
 		contentPane.add(btnCancel, "4, 6, center, center");
@@ -140,14 +141,11 @@ public class SignInPage extends JFrame {
 	}
 
 	
-	protected void callCancelMethod(JFrame previousFrame) {
-		this.dispose();
-		previousFrame.setVisible(true);
-	}
-	
 	protected void clearAll() {
+		if(usernameTxtField!=null && passwordTxtField!=null) {
 		usernameTxtField.setText("");
 		passwordTxtField.setText("");
+		}
 	}
 
 }
