@@ -1,0 +1,41 @@
+pipeline {
+    agent { 
+        node {
+            label 'Project_101_Windows'
+            }
+      }
+    tools{
+		jdk 'jdk-21'
+    }
+    triggers {
+        pollSCM '* * * * *'
+    }
+    stages {
+        stage('Build') {
+            steps {
+		//bat 'chmod +x gradlew'
+		bat './gradlew clean assemble'
+            }
+        }
+        stage('Test') {
+            steps {
+		bat './gradlew test'
+            }
+        }
+        stage('Build dependencies') {
+			steps {
+				bat 'gradlew.bat copyDependencies'
+			}
+		}
+        stage('Package') {
+            steps {
+                bat 'gradlew.bat bootJar'   // replace with your task name
+            }
+        }
+        //stage('Archive') {
+        //    steps {
+        //        archiveArtifacts artifacts: 'build/libs/*.jar', fingerprint: true
+        //    }
+        //}
+    }
+}
