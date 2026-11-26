@@ -85,8 +85,9 @@ public class UserProfiles {
 		    PropertiesConfiguration config = builder.getConfiguration();
 
 		    // Adds new keys at the bottom or updates existing keys in-place
-		    config.setProperty("user.accounts." + name + ".username", username);
-		    config.setProperty("user.accounts." +  name +".password", password);
+		    config.setProperty("user.accounts." + username + ".name", name);
+		    config.setProperty("user.accounts." + username + ".username", username);
+		    config.setProperty("user.accounts." + username +".password", password);
 
 		    // Saves cleanly without overwriting unrelated entries
 		    builder.save();

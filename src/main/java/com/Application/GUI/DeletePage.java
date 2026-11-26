@@ -62,7 +62,6 @@ public class DeletePage extends JFrame {
 	public void initialize(JFrame previousFrame) {
 		
 		setTitle("Edit Entry");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, -11, 547, 368);
 		clearAll();
 		setLocationRelativeTo(null);
@@ -167,13 +166,16 @@ public class DeletePage extends JFrame {
 				if(!updAppNameField.getText().isEmpty() && !updEmailAddField.getText().isEmpty()){
 	
 					int response = JOptionPane.showConfirmDialog(btnDelete, "Are you sure?");
-					if(response == JOptionPane.YES_OPTION)
+					if(response == JOptionPane.YES_OPTION) {
 						JOptionPane.showMessageDialog(null, passObj.deletePasswordEntry(updAppNameField.getText(),updEmailAddField.getText()));
+						clearAll();
+					}
 					else
 						return;
 				}else {
 					JOptionPane.showMessageDialog(null, "Application name and email address not associated, please check.");
 				}
+				clearAll();
 			}
 		});
 		btnDelete.setBounds(148, 266, 148, 23);
@@ -186,7 +188,9 @@ public class DeletePage extends JFrame {
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				callCancelMethod(previousFrame);
+				clearAll();
+				setVisible(false);
+				previousFrame.setVisible(true);
 			}
 		});
 		btnCancel.setBounds(412, 266, 89, 23);
@@ -194,11 +198,6 @@ public class DeletePage extends JFrame {
 		
 	}
 	
-	protected void callCancelMethod(JFrame previousFrame) {
-		clearAll();
-		this.dispose();
-		previousFrame.setVisible(true);
-	}
 	
 	protected void clearAll() {
 		if(appNameField!= null && emailAddField!=null && updAppNameField!=null && updEmailAddField!=null) {

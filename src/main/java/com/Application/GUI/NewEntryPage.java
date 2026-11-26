@@ -1,6 +1,5 @@
 package com.Application.GUI;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 
@@ -32,6 +31,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.JComboBox;
+import java.awt.CardLayout;
 
 @Component
 public class NewEntryPage extends JDialog {
@@ -87,9 +87,9 @@ public class NewEntryPage extends JDialog {
 	public void initialize() {
 		clearAll();
 		setBounds(100, 100, 450, 300);
-		getContentPane().setLayout(new BorderLayout());
+		getContentPane().setLayout(new CardLayout(0, 0));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		getContentPane().add(contentPanel, "name_139878148419300");
 		contentPanel.setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				FormSpecs.DEFAULT_COLSPEC,
@@ -198,7 +198,7 @@ public class NewEntryPage extends JDialog {
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
+			getContentPane().add(buttonPane, "name_139878231412500");
 			{
 				
 				okCreate = new JButton("Create");
@@ -210,15 +210,13 @@ public class NewEntryPage extends JDialog {
 						String cnfPasswordFieldStr =  new String(confirmPasswordField.getPassword());
 						if(passwordFieldStr.equals(cnfPasswordFieldStr)) {
 							JOptionPane.showMessageDialog(null, passwordObj.addPasswordToDB(applicationNameField.getText(), emailAddressField.getText(), comboBox.getSelectedItem().toString(), passwordFieldStr));
-							NewEntryPage.this.clearAll();
+							clearAll();
 						
 						}else {
 							JOptionPane.showMessageDialog(null, "The password doesn't match. Please check it again.");
 						}
-						
-
+						clearAll();
 					}
-					
 					
 				});
 				okCreate.setActionCommand("Create");
@@ -242,7 +240,7 @@ public class NewEntryPage extends JDialog {
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						clearAll();
-						NewEntryPage.this.dispose();
+						setVisible(false);
 						
 					}
 				});

@@ -67,6 +67,8 @@ public class PasswordLedger extends JFrame {
 		    model.addRow(rowData);
 		}
 		showAllJtable = new JTable(model);
+		showAllJtable.setRowSelectionAllowed(false);
+		showAllJtable.setEnabled(false);
 		showAllJtable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		showAllScrollPane.setViewportView(showAllJtable);
 	}
