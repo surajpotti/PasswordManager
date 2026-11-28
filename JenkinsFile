@@ -1,7 +1,7 @@
 pipeline {
     agent { 
         node {
-            label 'Project_101_Windows'
+            label 'remote_machine_durgesh'
             }
       }
     tools{
